@@ -36,7 +36,32 @@ app.post('/student/signle', async (req, res, next) => {
 });
 
 // multiple
-app.post('student/multiple', (req, res, next) => {});
+app.post('/student/multiple', async (req, res, next) => {
+  try {
+    const response = await Student.insertMany(req.body);
+    console.log(req.body, 'D');
+    res.status(200).json({ message: 'Students added' });
+  } catch (error) {
+    res.status(500).json({ errorMesage: error.message });
+  }
+});
+
+// updte
+app.put('/student/:id', async (req, res, next) => {
+  try {
+    // const { email } = req.query;
+    const { dept } = req.body;
+    const { id } = req.params;
+    const student = await Student.findById(id);
+    student.dept = dept;
+    await student.save();
+    // await Student.findOneAndUpdate({ email }, { dept });
+
+    res.status(200).json({ message: 'Students updted' });
+  } catch (error) {
+    res.status(500).json({ errorMesage: error.message });
+  }
+});
 
 app.listen(8000, () => {
   console.log('server running onport 800');
