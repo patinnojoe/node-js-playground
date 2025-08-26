@@ -59,11 +59,21 @@ app.post('/student/multiple', async (req, res, next) => {
 //     res.status(500).json({errorMessage:error.message})
 //   }
 // })
-app.get('/student/multiple', async (req, res) => {
+app.get('/students', async (req, res) => {
   try {
     const { dept } = req.query;
     const students = await Student.find({ dept });
     res.status(200).json({ data: students });
+  } catch (error) {
+    res.status(500).json({ errorMessage: error.message });
+  }
+});
+
+app.delete('/delete', async (req, res) => {
+  try {
+    const { email } = req.query;
+ await Student.findOneAndDelete({ email });
+    res.status(200).json({ message: 'email deleted' });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
