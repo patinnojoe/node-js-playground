@@ -46,22 +46,71 @@ app.post('/student/multiple', async (req, res, next) => {
   }
 });
 
-// updte
-app.put('/student/:id', async (req, res, next) => {
-  try {
-    // const { email } = req.query;
-    const { dept } = req.body;
-    const { id } = req.params;
-    const student = await Student.findById(id);
-    student.dept = dept;
-    await student.save();
-    // await Student.findOneAndUpdate({ email }, { dept });
 
-    res.status(200).json({ message: 'Students updted' });
+
+// find multiple
+
+// app.get('/student/multiple', async(req, res, next)=>{
+//   try {
+//     const {dept} = req.query;
+//     const student = await Student.find({dept})
+//     res.status(200).json({data:student})
+//   } catch (error) {
+//     res.status(500).json({errorMessage:error.message})
+//   }
+// })
+app.get('/student/multiple', async (req, res) => {
+  try {
+    const { dept } = req.query;
+    const students = await Student.find({ dept });
+    res.status(200).json({ data: students });
   } catch (error) {
-    res.status(500).json({ errorMesage: error.message });
+    res.status(500).json({ errorMessage: error.message });
   }
 });
+
+// update many
+app.put('/student/multiple', async (req, res, next)=>{
+  const {dept} = req.query
+  const {age} = req.body
+  try {
+    await Student.updateMany({dept: dept}, {age:age})
+      res.status(200).json({ message: 'Students updated' });
+  } catch (error) {
+    res.status(500).json({ errorMesage: error.message });
+    
+  }
+})
+// updte
+// app.put('/student/:id', async (req, res, next) => {
+//   try {
+//     // const { email } = req.query;
+//     const { dept } = req.body;
+//     const { id } = req.params;
+//     const student = await Student.findById(id);
+//     student.dept = dept;
+//     await student.save();
+//     // await Student.findOneAndUpdate({ email }, { dept });
+
+//     res.status(200).json({ message: 'Students updted' });
+//   } catch (error) {
+//     res.status(500).json({ errorMesage: error.message });
+//   }
+// });
+
+
+
+// app.get('/student/:id', async (req, res, next)=>{
+//   try {
+//     const {id} = req.params;
+//     const student = await Student.findById(id);
+//     res.status(200).json({data:student})
+//   } catch (error) {
+//     res.status(500).json({errorMessage:error.message})
+    
+//   }
+// })
+
 
 app.listen(8000, () => {
   console.log('server running onport 800');
